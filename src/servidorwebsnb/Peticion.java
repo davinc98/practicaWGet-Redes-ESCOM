@@ -45,9 +45,7 @@ public class Peticion {
                 bRes = ByteBuffer.wrap(res.getBytes());
                 ch.write(bRes);
             } else {
-                enc = "HTTP/1.1 200 OK \r\n"
-                        + "Server: SuperServidor/1.0 \n";
-//                        + "Content-Type: text/html \n\r\n";
+                enc = "HTTP/1.1 200 OK \r\nServer: JESUS-JOSE/1.0 \n";
                 if (lectura.startsWith("GET")) {
                     if (lectura.indexOf("?") != -1) {//Peticion GET con parametros en URL
                         String[] lines = lectura.split("\n");
@@ -85,19 +83,24 @@ public class Peticion {
                     String[] lines = lectura.split("\n");
                     String[] line = lines[0].split(" ");
                     String params = getParametros(line[1]);
-
-                    String res = "<html><head></head><body>Parametros: " + params + "</body></html>";
-
+                    
+                    enc = "HTTP/1.1 200 OK \r\nServer: JESUS-JOSE/1.0 \n";
                     bRes = ByteBuffer.wrap(enc.getBytes());
                     ch.write(bRes);
+                    bRes = ByteBuffer.wrap("Content-Type: text/html \n\r\n".getBytes());
+                    ch.write(bRes);
+                    String res = "<html><head></head><body>RESPUESTA POST</body></html>";
                     bRes = ByteBuffer.wrap(res.getBytes());
                     ch.write(bRes);
                     System.out.println("Respuesta POST: " + res);
                 } else if (lectura.startsWith("HEAD")) {
-                    String res = "<html><head></head><body>RESPUESTA HEAD</body></html>";
-
+                    
+                    enc = "HTTP/1.1 200 OK \r\nServer: JESUS-JOSE/1.0 \n";
                     bRes = ByteBuffer.wrap(enc.getBytes());
                     ch.write(bRes);
+                    bRes = ByteBuffer.wrap("Content-Type: text/html \n\r\n".getBytes());
+                    ch.write(bRes);
+                    String res = "<html><head></head><body>RESPUESTA HEAD</body></html>";
                     bRes = ByteBuffer.wrap(res.getBytes());
                     ch.write(bRes);
                     System.out.println("Respuesta HEAD: " + res);
@@ -120,15 +123,11 @@ public class Peticion {
                     }
                     System.out.println("Archivo Eliminado: " + fileName);
                 } else {
-                    String error501 = "HTTP/1.1 501 Not Implementes \r\n"
-                            + "Server: ServerZR/1.0 \n"
-                            + "Content-Type: text/html \n"
-                            + "Date: " + new Date() + " \n\r\n";
-
-                    bRes = ByteBuffer.wrap(error501.getBytes());
+                    String res = "HTTP/1.1 501 No Implementado \r\nServer: JESUS-JOSE/1.0 \nContent-Type: text/html \nDate: " + new Date() + " \n\r\n";
+                    bRes = ByteBuffer.wrap(res.getBytes());
                     ch.write(bRes);
                     sendArchivo("error.html", ch);
-                    System.out.println("[OK] Respuesta");
+                    System.out.println("Tipo de peticion no implementada");
                 }
             }
         } catch (IOException ex) {
